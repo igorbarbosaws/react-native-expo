@@ -5,12 +5,13 @@ import { favoritar } from "../storage/favoritos";
 
 const IMG = "https://image.tmdb.org/t/p/w500";
 
+// A prop "route" traz os parâmetros enviados na navegação
 export default function DetalhesFilme({ route }) {
-  const { filme } = route.params;
+  const { filme } = route.params; // desempacota o filme enviado pela Lista
   const [mensagem, setMensagem] = useState("");
 
   async function aoFavoritar() {
-    await favoritar(filme);
+    await favoritar(filme); // grava no AsyncStorage do celular
     setMensagem("Filme salvo nos favoritos! ⭐");
   }
 
@@ -29,6 +30,7 @@ export default function DetalhesFilme({ route }) {
           </Button>
         </Card.Actions>
       </Card>
+      {/* A mensagem só aparece depois de favoritar */}
       {mensagem !== "" && (
         <Text variant="bodyLarge" style={{ marginTop: 12 }}>
           {mensagem}
