@@ -5,14 +5,18 @@ import { favoritar } from "../storage/favoritos";
 
 const IMG = "https://image.tmdb.org/t/p/w500";
 
-// A prop "route" traz os parâmetros enviados na navegação
 export default function DetalhesFilme({ route }) {
-  const { filme } = route.params; // desempacota o filme enviado pela Lista
+  const { filme } = route.params;
   const [mensagem, setMensagem] = useState("");
 
   async function aoFavoritar() {
-    await favoritar(filme); // grava no AsyncStorage do celular
-    setMensagem("Filme salvo nos favoritos! ⭐");
+    try {
+      await favoritar(filme);
+      setMensagem("Filme salvo nos favoritos! ⭐");
+    } catch (erro) {
+      console.warn("Erro ao favoritar:", erro);
+      setMensagem("Erro ao salvar o filme. 😕");
+    }
   }
 
   return (
@@ -25,16 +29,11 @@ export default function DetalhesFilme({ route }) {
           <Paragraph>Nota: {filme.vote_average.toFixed(1)}</Paragraph>
         </Card.Content>
         <Card.Actions>
-          <Button mode="contained" onPress={aoFavoritar}>
-            ⭐ Favoritar
-          </Button>
+          <Button mode="contained" onPress={aoFavoritar}>⭐ Favoritar</Button>
         </Card.Actions>
       </Card>
-      {/* A mensagem só aparece depois de favoritar */}
       {mensagem !== "" && (
-        <Text variant="bodyLarge" style={{ marginTop: 12 }}>
-          {mensagem}
-        </Text>
+        <Text variant="bodyLarge" style={{ marginTop: 12 }}>{mensagem}</Text>
       )}
     </ScrollView>
   );

@@ -1,19 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { View, FlatList } from "react-native";
-import {
-  Card,
-  Title,
-  Paragraph,
-  ActivityIndicator,
-  Text,
-} from "react-native-paper";
+import { Card, Title, Paragraph, ActivityIndicator, Text } from "react-native-paper";
+import { useFocusEffect } from "@react-navigation/native";
 import { quantidadeFavoritos } from "../storage/favoritos";
 
 const CHAVE_API = "3fc47539ad6b1b40981d67d18e578fb6";
-const URL =
-  "https://api.themoviedb.org/3/movie/popular?api_key=" +
-  CHAVE_API +
-  "&language=pt-BR";
+const URL = "https://api.themoviedb.org/3/movie/popular?api_key=" + CHAVE_API + "&language=pt-BR";
 const IMG = "https://image.tmdb.org/t/p/w500";
 
 export default function ListaFilmes({ navigation }) {
@@ -27,10 +19,19 @@ export default function ListaFilmes({ navigation }) {
       const dados = await resposta.json();
       setFilmes(dados.results);
       setCarregando(false);
-      setQtdFavoritos(await quantidadeFavoritos());
     }
     buscar();
   }, []);
+
+  // Recarrega a quantidade toda vez que a tela volta a ficar em foco
+  // (ex.: ao voltar da tela de detalhes depois de favoritar)
+  useFocusEffect(
+    useCallback(() => {
+      quantidadeFavoritos()
+        .then((qtd) => setQtdFavoritos(qtd))
+        .catch((erro) => console.warn("Erro ao ler favoritos:", erro));
+    }, [])
+  );
 
   if (carregando) {
     return <ActivityIndicator animating={true} style={{ marginTop: 50 }} />;
@@ -43,10 +44,7 @@ export default function ListaFilmes({ navigation }) {
         data={filmes}
         keyExtractor={(filme) => String(filme.id)}
         renderItem={({ item }) => (
-          <Card
-            style={{ marginTop: 10 }}
-            onPress={() => navigation.navigate("Detalhes", { filme: item })}
-          >
+          <Card style={{ marginTop: 10 }} onPress={() => navigation.navigate("Detalhes", { filme: item })}>
             <Card.Cover source={{ uri: IMG + item.poster_path }} />
             <Card.Content>
               <Title>{item.title}</Title>
