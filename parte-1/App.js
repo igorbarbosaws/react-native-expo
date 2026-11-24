@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 
-const CHAVE = "COLE_SUA_CHAVE_AQUI";
+const CHAVE = "3fc47539ad6b1b40981d67d18e578fb6";
 const URL =
   "https://api.themoviedb.org/3/movie/popular?api_key=" +
   CHAVE +
