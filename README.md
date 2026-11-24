@@ -52,7 +52,7 @@ npx expo start
 
 Depois escaneie o QR Code com o app **Expo Go** no celular.
 
-> 🔑 A chave da API não está no repositório por seguranço. Crie a sua gratuitamente
+> 🔑 Crie a sua chave gratuitamente
 > em https://www.themoviedb.org/settings/api (plano Developer).
 
 ## 🛠️ Tecnologias
