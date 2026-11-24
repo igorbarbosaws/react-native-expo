@@ -9,15 +9,13 @@ import {
 } from "react-native-paper";
 import { quantidadeFavoritos } from "../storage/favoritos";
 
-// Chave NÃO versionada: crie a sua em https://www.themoviedb.org/settings/api
-const CHAVE_API = "COLE_SUA_CHAVE_AQUI";
+const CHAVE_API = "3fc47539ad6b1b40981d67d18e578fb6";
 const URL =
   "https://api.themoviedb.org/3/movie/popular?api_key=" +
   CHAVE_API +
   "&language=pt-BR";
 const IMG = "https://image.tmdb.org/t/p/w500";
 
-// A prop "navigation" é injetada automaticamente pelo React Navigation
 export default function ListaFilmes({ navigation }) {
   const [filmes, setFilmes] = useState([]);
   const [carregando, setCarregando] = useState(true);
@@ -29,7 +27,6 @@ export default function ListaFilmes({ navigation }) {
       const dados = await resposta.json();
       setFilmes(dados.results);
       setCarregando(false);
-      // Lê quantos favoritos já estão gravados no celular
       setQtdFavoritos(await quantidadeFavoritos());
     }
     buscar();
@@ -46,7 +43,6 @@ export default function ListaFilmes({ navigation }) {
         data={filmes}
         keyExtractor={(filme) => String(filme.id)}
         renderItem={({ item }) => (
-          // Tocar no card navega para "Detalhes", levando o filme como parâmetro
           <Card
             style={{ marginTop: 10 }}
             onPress={() => navigation.navigate("Detalhes", { filme: item })}
